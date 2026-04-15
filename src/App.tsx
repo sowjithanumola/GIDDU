@@ -72,6 +72,10 @@ export default function App() {
           },
           onerror: (error) => {
             console.error('Live API error:', error);
+            // Log more details if possible
+            if (error instanceof Error) {
+                console.error('Error message:', error.message);
+            }
             setStatus('Error');
           }
         },
@@ -125,6 +129,16 @@ export default function App() {
     }
   };
 
+  const requestMicrophonePermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log('Microphone permission granted');
+      stream.getTracks().forEach(track => track.stop()); // Stop the stream immediately
+    } catch (error) {
+      console.error('Microphone permission denied:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#05070a] text-white flex flex-col items-center justify-center p-6 font-sans">
       <div className="absolute top-10 right-10 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-semibold flex items-center gap-2">
@@ -145,17 +159,22 @@ export default function App() {
 
       <h1 className="text-4xl font-bold tracking-widest mb-10">GIDDU</h1>
 
-      <div className="flex gap-4">
-        {!isConnected ? (
-          <button onClick={connect} className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition">Connect</button>
-        ) : (
-          <>
-            <button onClick={toggleListening} className={`p-4 rounded-full transition ${isListening ? 'bg-red-600' : 'bg-green-600'}`}>
-              {isListening ? <MicOff /> : <Mic />}
-            </button>
-            <button onClick={disconnect} className="bg-white/10 hover:bg-white/20 px-8 py-3 rounded-full font-semibold transition">Disconnect</button>
-          </>
-        )}
+      <div className="flex flex-col gap-4 items-center">
+        <button onClick={requestMicrophonePermission} className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-full text-sm transition">
+          Enable Microphone
+        </button>
+        <div className="flex gap-4">
+          {!isConnected ? (
+            <button onClick={connect} className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-semibold transition">Connect</button>
+          ) : (
+            <>
+              <button onClick={toggleListening} className={`p-4 rounded-full transition ${isListening ? 'bg-red-600' : 'bg-green-600'}`}>
+                {isListening ? <MicOff /> : <Mic />}
+              </button>
+              <button onClick={disconnect} className="bg-white/10 hover:bg-white/20 px-8 py-3 rounded-full font-semibold transition">Disconnect</button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
