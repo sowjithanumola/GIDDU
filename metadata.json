@@ -1,0 +1,6 @@
+{
+  "name": "GIDDU",
+  "description": "Your personal voice assistant, created by Sowjith Anumola.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["voice-assistant"]
+}
