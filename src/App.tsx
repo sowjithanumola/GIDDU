@@ -15,6 +15,36 @@ export default function App() {
   const [status, setStatus] = useState('Disconnected');
   const sessionRef = useRef<any>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  const playAudio = (base64Data: string) => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext({ sampleRate: 16000 });
+    }
+    const audioContext = audioContextRef.current;
+    
+    // Decode base64 to binary
+    const binaryString = atob(base64Data);
+    const len = binaryString.length;
+    const bytes = new Int16Array(len / 2);
+    for (let i = 0; i < len / 2; i++) {
+      bytes[i] = (binaryString.charCodeAt(i * 2 + 1) << 8) | binaryString.charCodeAt(i * 2);
+    }
+
+    // Convert Int16 to Float32
+    const float32 = new Float32Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) {
+      float32[i] = bytes[i] / 32768;
+    }
+
+    const buffer = audioContext.createBuffer(1, float32.length, 16000);
+    buffer.copyToChannel(float32, 0);
+
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start();
+  };
 
   const connect = async () => {
     setStatus('Connecting...');
@@ -31,7 +61,8 @@ export default function App() {
             console.log('Received message:', message);
             const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
             if (base64Audio) {
-              console.log('Received audio');
+              console.log('Received audio, playing...');
+              playAudio(base64Audio);
             }
           },
           onclose: () => {
