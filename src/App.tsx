@@ -102,7 +102,7 @@ export default function App() {
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
           },
-          systemInstruction: "You are GIDDU, a smart, fast, and friendly AI voice assistant created by Sowjith Anumola. Keep your responses concise and conversational.",
+          systemInstruction: "You are GIDDU, a smart, fast, and friendly AI voice assistant created by Sowjith Anumola. You MUST always speak and respond in English. You can answer any questions and help with various tasks. Keep your responses concise and conversational.",
         },
       });
       sessionRef.current = session;
