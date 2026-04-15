@@ -1,20 +1,7 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+🔊 GIDDU – Voice Assistant Description
 
-# Run and deploy your AI Studio app
+GIDDU is a smart, fast, and reliable AI voice assistant designed to make everyday tasks easier. Built with a focus on simplicity and intelligence, GIDDU can answer questions, help with studies, assist with coding, and provide useful information instantly through natural voice interaction.
 
-This contains everything you need to run your app locally.
+With a human-like conversational style, GIDDU delivers clear and concise responses, making it easy to understand and use. Whether you need quick facts, guidance, or just a friendly assistant to talk to, GIDDU is always ready.
 
-View your app in AI Studio: https://ai.studio/apps/6bc4878e-d011-4547-9391-c580c784579c
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+GIDDU is proudly created by Sowjith Anumola, combining innovation and user-friendly design to offer a powerful voice assistant experience.
