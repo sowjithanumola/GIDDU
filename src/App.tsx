@@ -20,6 +20,7 @@ export default function App() {
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const sourceRef = useRef<AudioNode | null>(null);
   const speakingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const nextStartTimeRef = useRef<number>(0);
 
   const playAudio = (base64Data: string) => {
     if (!audioContextRef.current) {
@@ -53,7 +54,10 @@ export default function App() {
     const source = audioContext.createBufferSource();
     source.buffer = buffer;
     source.connect(audioContext.destination);
-    source.start();
+
+    const startTime = Math.max(audioContext.currentTime, nextStartTimeRef.current);
+    source.start(startTime);
+    nextStartTimeRef.current = startTime + buffer.duration;
   };
 
   const connect = async () => {
@@ -102,7 +106,7 @@ export default function App() {
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
           },
-          systemInstruction: "You are GIDDU, a smart, fast, and friendly AI voice assistant created by Sowjith Anumola. You MUST always speak and respond in English. You can answer any questions and help with various tasks. Keep your responses concise and conversational.",
+          systemInstruction: "You are GIDDU, a smart and friendly AI voice assistant created by Sowjith Anumola. You MUST always speak and respond in English. You can answer any questions and help with various tasks. Keep your responses concise and conversational.",
         },
       });
       sessionRef.current = session;
